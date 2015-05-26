@@ -53,7 +53,7 @@ void key_generate(unsigned char key[4][4], unsigned char expan_key[4][44])
           expan_key[index+1][i] = temp[index+1] ^ expan_key[index+1][i-4];
           expan_key[index+2][i] = temp[index+2] ^ expan_key[index+2][i-4];
 		  expan_key[index+3][i] = temp[index+3] ^ expan_key[index+3][i-4];
-
+     
       rloop++;
     }
     else

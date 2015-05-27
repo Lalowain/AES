@@ -5,7 +5,53 @@
 #include <string.h>
 #include "AES.h"
 
-int i,j,k;
+/*
+//Optimization To be discussed: 
+
+//1. Doing 1D array to avoid nested loop
+char s[16]={0x32,0x88,0x31,0xE0,0x43,0x5A,0x31,0x37,0xF6,0x30,0x98,0x07,0xa8,0x8D,0xA2,0x34};
+char k[16]= {0x2B,0x28,0xAB,0x09,0x7E,0xAE,0xF7,0xCF,0x15,0xD2,0x15,0x4F,0x16,0xA6,0x88,0x3C};
+//- Add round key: 
+int i;
+for(i=0;i<16;i++)
+s[i] ^=k[i];
+//-subbyte: 
+int i;
+for(i=0;i<16;i++)
+s[i] =sbox[s[i]];
+//-shift row:
+int temp;
+temp=s[7]; s[7]=s[4]; s[4]=s[5]; s[5]=s[6]; s[6]=temp;
+temp=s[10]; s[10]=s[8]; s[8]=temp; temp=s[11]; s[11]=s[9]; s[9]=temp;
+temp=[s13]; s[13]=s[12]; s[12]=s[15]; s[15]=s[14]; s[14]=temp;
+ 
+//-mix columns
+
+// 01 don't change 
+//02 if left most bit is 1 >> 1 bit shift left then xor with 0x1B
+//03 multiply by 2, then XOR result with original
+//XOR results
+//copy column
+//Q: Does applying & change the number in the memory?
+char c[4]={s[0],s[4],s[8],s[12]}
+char t;
+if( c[0]&0x80)
+s[0] = (s[0]<<=1)^0x1B;
+t = c[1]
+if(c[0]&0x80)
+s[0] ^=(((t<<=1)^0x1b)^c[1])^c[2]^c[3];
+else 
+s[0] ^=c[1]^c[2]^c[3];
+
+//===================
+
+
+
+
+
+
+*/
+
 
 
 
@@ -14,6 +60,7 @@ int i,j,k;
 
 void Add_key(unsigned char state[4][4], unsigned char temp_key[4][4])
 {
+int i,j;
   for(i = 0; i < 4; i++) {
     for(j = 0; j < 4; j++) {
       state[i][j] = state[i][j] ^ temp_key[i][j];
@@ -23,7 +70,7 @@ void Add_key(unsigned char state[4][4], unsigned char temp_key[4][4])
 
 void key_generate(unsigned char key[4][4], unsigned char expan_key[4][44])
 {
-
+int i,j;
   int rloop = 0;
   printf("\n RCON \n");
   for(i = 0; i < 44; i++)
@@ -86,7 +133,7 @@ void key_generate(unsigned char key[4][4], unsigned char expan_key[4][44])
 
 void subByte(unsigned char state[4][4])
 {
-
+int i,j;
   for(i=0;i<4;i++){
     for(j=0;j<4;j++){
 
@@ -126,7 +173,7 @@ void mixcolumn(unsigned char state[4][4], unsigned char temp[4][4])
 {
 
 
-
+int i,j,k;
   unsigned char coumn[4][4]={{0x02, 0x03, 0x01, 0x01},
     {0x01, 0x02, 0x03, 0x01},
     {0x01, 0x01, 0x02, 0x03},
@@ -175,6 +222,7 @@ void mixcolumn(unsigned char state[4][4], unsigned char temp[4][4])
 
 void print(unsigned char print[4][4])
 {
+int i,j;
   for(i=0;i<4;i++){
     for(j=0;j<4;j++){
       //  state[i][j]=state1[j][i];

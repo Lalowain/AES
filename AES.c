@@ -149,20 +149,15 @@ void mixcolumn(unsigned char state[4][4], unsigned char temp[4][4])
           tem =state[k][i] ;
         if(coumn[j][k]==0x02)
         {
-          if (state[k][i]&0x80)
-          {
-            //	printf("%#X jj ",state[k][i]);
-            tem =(state[k][i]<<1)^0x1b ;
-          }
-          else
-            tem =(state[k][i]<<1);
+          
+            tem =(state[k][i]<<1)^((state[k][i]/0x80)*0x11b)  ;
+          
         }
         if(coumn[j][k]==0x03)
         {
-          if (state[k][i]&0x80)
-            tem =((state[k][i]<<1)^state[k][i])^0x1b ;
-          else
-            tem =((state[k][i]<<1)^state[k][i]);
+          
+            tem =((state[k][i]<<1)^state[k][i])^((state[k][i]/0x80)*0x11b)  ;
+          
         }
         //   tem1 ^=(state[k][i]*coumn[j][k])%(0x11B);
         temp[j][i] = temp[j][i]^(tem);

@@ -146,9 +146,8 @@ void mixcolumn(unsigned char state[4][4], unsigned char temp[4][4])
       for(k=0;k<4;k++)
       {
 
-          tem =((state[k][i]<< (coumn[j][k]>>1))^(state[k][i]*(coumn[j][k]/0x03)))^(((state[k][i]/0x80)*0x1b )*(coumn[j][k]/0x02)) ;
-
-
+         
+          tem =((state[k][i]<< (coumn[j][k]>>1))^(state[k][i]*((coumn[j][k]>>1)&coumn[j][k])))^(((state[k][i]>>7)*0x1b )*(coumn[j][k]>>1)) ;
 
         temp[j][i] = temp[j][i]^(tem);
 

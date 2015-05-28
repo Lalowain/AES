@@ -8,10 +8,6 @@
 
 
 
-
-
-
-
 void Add_key(unsigned char state[4][4], unsigned char temp_key[4][4])
 {
 	int i,j;

@@ -5,9 +5,17 @@
 #include <string.h>
 #include "AES.h"
 
+
+
+
+
+
+
+
 void Add_key(unsigned char state[4][4], unsigned char temp_key[4][4])
 {
-int i,j;
+	int i,j;
+
   for(i = 0; i < 4; i++) {
     for(j = 0; j < 4; j++) {
       state[i][j] = state[i][j] ^ temp_key[i][j];
@@ -17,7 +25,7 @@ int i,j;
 
 void key_generate(unsigned char key[4][4], unsigned char expan_key[4][44])
 {
-int i,j;
+	int i,j;
   int rloop = 0;
   printf("\n RCON \n");
   for(i = 0; i < 44; i++)
@@ -34,20 +42,19 @@ int i,j;
     {
 
       unsigned char temp[4] = {expan_key[1][i-1], expan_key[2][i-1], expan_key[3][i-1], expan_key[0][i-1]};
-      //	printf("%#X  %#X  %#X  %#X  \n",temp[0],temp[1],temp[2],temp[3]);
       int index;
       for(index = 0; index < 4; index++)
       {
         temp[index] = sbox[temp[index]];
       }
-      //	printf("%#X  %#X  %#X  %#X  \n",temp[0],temp[1],temp[2],temp[3]);
+
       index =0;
-     
+
           expan_key[index][i] = temp[index] ^ Rcon[rloop] ^ expan_key[index][i-4];
           expan_key[index+1][i] = temp[index+1] ^ expan_key[index+1][i-4];
           expan_key[index+2][i] = temp[index+2] ^ expan_key[index+2][i-4];
 		  expan_key[index+3][i] = temp[index+3] ^ expan_key[index+3][i-4];
-     
+
       rloop++;
     }
     else
@@ -80,7 +87,7 @@ int i,j;
 
 void subByte(unsigned char state[4][4])
 {
-int i,j;
+	int i,j;
   for(i=0;i<4;i++){
     for(j=0;j<4;j++){
 
@@ -89,11 +96,13 @@ int i,j;
   }
 
 
-  //	 printf("location value %#x ",Sb[num]);
+
 }
 
 void shiftRaw(unsigned char state[4][4])
 {
+
+
   char tmp;
   tmp=state[1][3] ;
   state[1][3]=state[1][0];
@@ -120,7 +129,8 @@ void mixcolumn(unsigned char state[4][4], unsigned char temp[4][4])
 {
 
 
-int i,j,k;
+	int i,j,k;
+
   unsigned char coumn[4][4]={{0x02, 0x03, 0x01, 0x01},
     {0x01, 0x02, 0x03, 0x01},
     {0x01, 0x01, 0x02, 0x03},
@@ -131,7 +141,7 @@ int i,j,k;
       temp[i][j]=0x00;
 
   unsigned  char tem=0x00;
-  // unsigned char tem1=0x00;
+
   for(j=0;j<4;j++)
   {
 
@@ -139,28 +149,15 @@ int i,j,k;
     {
       for(k=0;k<4;k++)
       {
-        if(coumn[j][k]==0x01)
-          tem =state[k][i] ;
-        if(coumn[j][k]==0x02)
-        {
-          
-            tem =(state[k][i]<<1)^((state[k][i]/0x80)*0x11b)  ;
-          
-        }
-        if(coumn[j][k]==0x03)
-        {
-          
-            tem =((state[k][i]<<1)^state[k][i])^((state[k][i]/0x80)*0x11b)  ;
-          
-        }
-        //   tem1 ^=(state[k][i]*coumn[j][k])%(0x11B);
+
+          tem =((state[k][i]<< (coumn[j][k]>>1))^(state[k][i]*(coumn[j][k]/0x03)))^(((state[k][i]/0x80)*0x1b )*(coumn[j][k]/0x02)) ;
+
+
+
         temp[j][i] = temp[j][i]^(tem);
-        //   printf("%#X  %#X ",state[k][i],coumn[j][k]);
-        // printf("%#X  ",tem);
-        // printf("\t");
+
       }
 
-      //printf("%#X  %#X\n",temp[j][i]);
     }
   }
 
@@ -169,10 +166,10 @@ int i,j,k;
 
 void print(unsigned char print[4][4])
 {
-int i,j;
+	int i,j;
   for(i=0;i<4;i++){
     for(j=0;j<4;j++){
-      //  state[i][j]=state1[j][i];
+
       printf("%#X",print[i][j]);
       printf("\t");
 
@@ -181,5 +178,4 @@ int i,j;
   }
   printf("\n");
 }
-
 

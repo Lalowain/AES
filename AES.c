@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-#include <conio.h>
 #include <windows.h>
 #include <Math.h>
 #include "AES.h"
@@ -184,15 +183,15 @@ void mixcolumn(unsigned char state[4][4], unsigned char temp[4][4])
         temp[j][i] = temp[j][i]^(tem);
 
       }
-
+     
     }
+	
   }
 
-
-
-  for(i=0;i<4;i++)
+    for(i=0;i<4;i++)
       for(j=0;j<4;j++)
         state[i][j]=temp[i][j];
+        
 
 }
 

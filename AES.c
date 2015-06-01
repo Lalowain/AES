@@ -1,4 +1,3 @@
-/* itoa example */
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -131,12 +130,12 @@ void rev_shiftrows(unsigned char state[4][4])
 {
 
 
-  char tmp;
-  tmp=state[3][3] ;
-   state[3][3]=state[3][0];
-   state[3][0]=state[3][1];
-   state[3][1]=state[3][2];
-   state[3][2]=tmp;
+   char tmp;
+   tmp=state[1][0] ;
+   state[1][0]=state[1][3];
+   state[1][3]=state[1][2];
+   state[1][2]=state[1][1];
+   state[1][1]=tmp;
 
    tmp=state[2][0] ;
    state[2][0]=state[2][2];
@@ -144,12 +143,13 @@ void rev_shiftrows(unsigned char state[4][4])
    tmp=state[2][3];
    state[2][3]=state[2][1];
    state[2][1]=tmp;
-
-   tmp=state[1][0] ;
-   state[1][0]=state[1][3];
-   state[1][3]=state[1][2];
-   state[1][2]=state[1][1];
-   state[1][1]=tmp;
+   
+   tmp=state[3][3] ;
+   state[3][3]=state[3][0];
+   state[3][0]=state[3][1];
+   state[3][1]=state[3][2];
+   state[3][2]=tmp;
+   
 
 }
 
@@ -178,7 +178,7 @@ void mixcolumn(unsigned char state[4][4], unsigned char temp[4][4])
       for(k=0;k<4;k++)
       {
 
-          tem =((state[k][i]<< (coumn[j][k]>>1))^(state[k][i]*((coumn[j][k]>>1)&coumn[j][k])))^(((state[k][i]>>7)*0x1b )*(coumn[j][k]>>1)) ;
+          tem =((state[k][i]<< (coumn[j][k]>>1))^(state[k][i]&-((coumn[j][k]>>1)&coumn[j][k])))^((0x1b & -(state[k][i]>>7) )&-(coumn[j][k]>>1)) ;
 
 
         temp[j][i] = temp[j][i]^(tem);
@@ -212,7 +212,7 @@ void rev_mixcolumn(unsigned char state[4][4], unsigned char temp[4][4])
   unsigned  char BYTE_Right_BIT = 0x01;
 
 
-  		 unsigned  char a,b=0x00;
+  		 unsigned  char a,b,b1,b2,b3=0x00;
   for(i=0;i<4;i++)
     for(j=0;j<4;j++)
       temp[i][j]=0x00;
@@ -232,14 +232,14 @@ void rev_mixcolumn(unsigned char state[4][4], unsigned char temp[4][4])
             a=coumn[j][k];
 	tem ^=(b*(a & BYTE_Right_BIT));
                        a>>=1;
-    	  			(((b1 =((((b<<1)^(0x1b*((b & BYTE_LEFT_BIT)/BYTE_LEFT_BIT))))))));
-    	  			tem ^=(b1*(a & BYTE_Right_BIT));
+    	  			(((b1 =((((b<<1)^(0x1b &-((b & BYTE_LEFT_BIT)/BYTE_LEFT_BIT))))))));
+    	  			tem ^=(b1 &-(a & BYTE_Right_BIT));
     	  			a>>=1;
-	            	(((b2 =((((b1<<1)^(0x1b*((b1 & BYTE_LEFT_BIT)/BYTE_LEFT_BIT))))))));
-	            	tem ^=(b2*(a & BYTE_Right_BIT));
+	            	(((b2 =((((b1<<1)^(0x1b &-((b1 & BYTE_LEFT_BIT)/BYTE_LEFT_BIT))))))));
+	            	tem ^=(b2 &-(a & BYTE_Right_BIT));
 	            	a>>=1;
-	            	(((b3 =((((b2<<1)^(0x1b*((b2 & BYTE_LEFT_BIT)/BYTE_LEFT_BIT))))))));
-	            	tem ^=(b3*(a & BYTE_Right_BIT));
+	            	(((b3 =((((b2<<1)^(0x1b &-((b2 & BYTE_LEFT_BIT)/BYTE_LEFT_BIT))))))));
+	            	tem ^=(b3 &-(a & BYTE_Right_BIT));
 
 
         temp[j][i] = temp[j][i]^(tem);

@@ -9,7 +9,6 @@
 #include "AES.h"
 
 
-
 void Add_key(unsigned char state[4][4], unsigned char temp_key[4][44],int index)
 {
 	int i,j;

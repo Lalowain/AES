@@ -231,10 +231,17 @@ void rev_mixcolumn(unsigned char state[4][4], unsigned char temp[4][4])
     	  tem=0x00;
             b=state[k][i];
             a=coumn[j][k];
+	tem ^=(b*(a & BYTE_Right_BIT));
+                       a>>=1;
+    	  			(((b1 =((((b<<1)^(0x1b*((b & BYTE_LEFT_BIT)/BYTE_LEFT_BIT))))))));
+    	  			tem ^=(b1*(a & BYTE_Right_BIT));
+    	  			a>>=1;
+	            	(((b2 =((((b1<<1)^(0x1b*((b1 & BYTE_LEFT_BIT)/BYTE_LEFT_BIT))))))));
+	            	tem ^=(b2*(a & BYTE_Right_BIT));
+	            	a>>=1;
+	            	(((b3 =((((b2<<1)^(0x1b*((b2 & BYTE_LEFT_BIT)/BYTE_LEFT_BIT))))))));
+	            	tem ^=(b3*(a & BYTE_Right_BIT));
 
-    	  			tem =(b*(a & BYTE_Right_BIT))^(((b =((((b<<1)^(0x1b*((b & BYTE_LEFT_BIT)/BYTE_LEFT_BIT)))^((a>>=1)/0xff))))*(a & BYTE_Right_BIT)))^(((b =((((b<<1)^(0x1b*((b & BYTE_LEFT_BIT)/BYTE_LEFT_BIT)))^((a>>=1)/0xff))))*(a & BYTE_Right_BIT)))^(((b =((((b<<1)^(0x1b*((b & BYTE_LEFT_BIT)/BYTE_LEFT_BIT)))^((a>>=1)/0xff))))*(a & BYTE_Right_BIT)));
-
-    	  		//	((b =((((b<<1)^(0x1b*((b & BYTE_LEFT_BIT)/BYTE_LEFT_BIT)))^((a>>=1)/0xff))))*(a & BYTE_Right_BIT));// b mod x^4+x^3+x+1
 
         temp[j][i] = temp[j][i]^(tem);
 

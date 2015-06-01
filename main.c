@@ -28,15 +28,30 @@ print(state);
 
 
 //================ start of Encryption =====================
-
+     LARGE_INTEGER FREQUENCY;                                   // Ticks per Second
+     LARGE_INTEGER START_TIME, END_TIME;                        // Start and End Time Counter
+     double ELAPSED_TIME;                                       // Overall Time Counter
+     QueryPerformanceFrequency(&FREQUENCY);
+     QueryPerformanceCounter(&START_TIME); 
+ 
 encryption(state,expan_key);
-
+      //** Timing Measurment 2 / 2 **//    
+     QueryPerformanceCounter(&END_TIME);                        // End Timer
+     ELAPSED_TIME = (END_TIME.QuadPart - START_TIME.QuadPart) * 1000.0 / FREQUENCY.QuadPart;
+     printf("\n%s  %lf %s" , "Time :",ELAPSED_TIME,"ms \n" );
+ 
+ 
 print(state);
 //================ start of Decryption =================
-
+     QueryPerformanceFrequency(&FREQUENCY);
+     QueryPerformanceCounter(&START_TIME); 
 
 decryption(state,expan_key);
-
+      //** Timing Measurment 2 / 2 **//    
+     QueryPerformanceCounter(&END_TIME);                        // End Timer
+     ELAPSED_TIME = (END_TIME.QuadPart - START_TIME.QuadPart) * 1000.0 / FREQUENCY.QuadPart;
+     printf("\n%s  %lf %s" , "Time :",ELAPSED_TIME,"ms \n" );
+ 
 
 print(state);
 	return 0;

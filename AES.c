@@ -195,6 +195,25 @@ void mixcolumn(unsigned char state[4][4], unsigned char temp[4][4])
 
 }
 
+ void mixColumns1 (unsigned char state[4][4]) {
+ int c , i;
+    for ( c=0; c<4; c++) {
+        unsigned char b1[4]  ;  // 'b1' is a copy of the current column from 'state'
+        unsigned char b2[4];  // 'b2' is a•{02} in GF(2^8)
+        for ( i=0; i<4; i++) {
+            b1[i] = state[i][c];
+            b2[i] = b1[i]<<1 ^ (0x1b &-(b1[i]>>7) );
+        }
+		 // b1[n] ^ b2[n] is a•{03} in GF(2^8)
+        state[0][c] = b2[0] ^ (b1[1] ^ b2[1]) ^ b1[2] ^ b1[3]; // {02}•a0 + {03}•a1 + a2 + a3
+        state[1][c] = b1[0] ^ b2[1] ^ (b1[2] ^ b2[2]) ^ b1[3]; // a0 • {02}•a1 + {03}•a2 + a3
+        state[2][c] = b1[0] ^ b1[1] ^ b2[2] ^ (b1[3] ^ b2[3]); // a0 + a1 + {02}•a2 + {03}•a3
+        state[3][c] = (b1[0] ^ b2[0]) ^ b1[1] ^ b1[2] ^ b2[3]; // {03}•a0 + a1 + a2 + {02}•a3
+		
+
+    }
+    
+}
 
 void rev_mixcolumn(unsigned char state[4][4], unsigned char temp[4][4])
 {
@@ -255,6 +274,29 @@ void rev_mixcolumn(unsigned char state[4][4], unsigned char temp[4][4])
 
 }
 
+ void revmixColumns1 (unsigned char state[4][4]) {
+ int c , i;
+    for ( c=0; c<4; c++) {
+        unsigned char b1[4] ;    // 'b1' is a copy of the current column from 'state'
+        unsigned char b2[4];   // 'b2' is a•{02} in GF(2^8)
+		unsigned char b4[4];  // 'b4' is a•{04} in GF(2^8)
+		unsigned char b8[4]; // 'b8' is a•{08} in GF(2^8)
+		
+        for ( i=0; i<4; i++) {
+            b1[i] = state[i][c];
+            b2[i] = b1[i] <<1 ^ (0x1b &-(b1[i]>>7) );
+			b4[i] = b2[i] <<1 ^ (0x1b &-(b2[i]>>7) );
+			b8[i] = b4[i] <<1 ^ (0x1b &-(b4[i]>>7) );
+        }
+        // b8[n] ^ b4[n] ^ b2[n] is a•{0e} , b8[n] ^ b2[n] ^ b1[n] is  a•{0b} , b8[n] ^ b4[n] ^ b1[n] is  a•{0d} , b8[n]  b1[n] is  a•{09}in GF(2^8)
+        state[0][c] = ( b8[0] ^ b4[0] ^ b2[0] )^ ( b8[1] ^ b2[1] ^ b1[1] )^ ( b8[2] ^ b4[2] ^ b1[2]) ^ ( b8[3] ^ b1[3]); // {0e}•a0 + {0b}•a1 + {0d}•a2 + {09}•a3
+        state[1][c] = ( b8[0] ^ b1[0]) ^ ( b8[1] ^ b4[1] ^ b2[1] ) ^ ( b8[2] ^ b2[2] ^ b1[2] )  ^ ( b8[3] ^ b4[3] ^ b1[3]); // {09}•a0 • {0e}•a1 + {0b}•a2 + {0d}•a3
+        state[2][c] = ( b8[0] ^ b4[0] ^ b1[0])  ^ ( b8[1] ^ b1[1]) ^ ( b8[2] ^ b4[2] ^ b2[2] ) ^ ( b8[3] ^ b2[3] ^ b1[3] ); // {0d}•a0 + {09}•a1 + {0e}•a2 + {0b}•a3
+        state[3][c] = ( b8[0] ^ b2[0] ^ b1[0] ) ^ ( b8[1] ^ b4[1] ^ b1[1])  ^ ( b8[2] ^ b1[2]) ^ ( b8[3] ^ b4[3] ^ b2[3] ) ; // {0b}•a0 + {0d}•a1 + {09}•a2 + {0e}•a3
+    }
+    
+}
+
 void encryption(unsigned char state[4][4], unsigned char expan_key[4][44])
 {
 
@@ -272,8 +314,8 @@ void encryption(unsigned char state[4][4], unsigned char expan_key[4][44])
 
 	shiftRaw(state);
 
-	mixcolumn(state,temp);
-
+    mixcolumn(state,temp);
+   // mixColumns1(state);
 
 	Add_key(state,expan_key,(int)(loop*start));
 
@@ -304,7 +346,7 @@ void decryption(unsigned char state[4][4], unsigned char expan_key[4][44])
 			Add_key(state,expan_key,(loop*start));
 
 		    rev_mixcolumn(state,temp);
-
+          //  revmixColumns1(state);
 			}
 
 		rev_shiftrows(state);

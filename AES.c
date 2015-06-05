@@ -522,12 +522,13 @@ void encryption(unsigned char state[4][4], unsigned char expan_key[4][44])
 	for(loop=1;loop<10;loop++)
 	{
 
-	subByte(state);
+	   subByte(state);
 
-	shiftRaw(state);
+	   shiftRaw(state);
 
- //   mixcolumn(state,temp);
-    mixColumns3(state);
+     //mixcolumn(state,temp);
+	 //mixColumns2(state);
+       mixColumns3(state);
 
 	Add_key(state,expan_key,(int)(loop*start));
 
@@ -557,7 +558,8 @@ void decryption(unsigned char state[4][4], unsigned char expan_key[4][44])
 
 			Add_key(state,expan_key,(loop*start));
 
-		  //  rev_mixcolumn(state,temp);
+		  //rev_mixcolumn(state,temp);
+		  //revmixColumns2(state);
             revmixColumns3(state);
 			}
 

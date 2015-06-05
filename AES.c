@@ -194,7 +194,7 @@ void mixcolumn(unsigned char state[4][4], unsigned char temp[4][4])
 
 }
 
- void mixColumns (unsigned char state[4][4]) {
+ void mixColumns2 (unsigned char state[4][4]) {
  int c , i;
     for ( c=0; c<4; c++) {
         unsigned char b1[4]  ;  // 'b1' is a copy of the current column from 'state'
@@ -222,6 +222,98 @@ void mixcolumn(unsigned char state[4][4], unsigned char temp[4][4])
 		
 
     }
+    
+}
+void mixColumns3 (unsigned char state[4][4]) {
+     unsigned char raw[4];
+
+	// raw 1
+	raw[0] = state[0][0];
+	raw[1] = state[1][0];
+	raw[2] = state[2][0];
+	raw[3] = state[3][0];
+	state[0][0] = mixcolumn_lookup[raw[0]][0];
+	state[0][0] ^= mixcolumn_lookup[raw[1]][1];
+	state[0][0] ^= raw[2];
+	state[0][0] ^= raw[3];
+	state[1][0] = raw[0];
+	state[1][0] ^= mixcolumn_lookup[raw[1]][0];
+	state[1][0] ^= mixcolumn_lookup[raw[2]][1];
+	state[1][0] ^= raw[3];
+	state[2][0] = raw[0];
+	state[2][0] ^= raw[1];
+	state[2][0] ^= mixcolumn_lookup[raw[2]][0];
+	state[2][0] ^= mixcolumn_lookup[raw[3]][1];
+	state[3][0] = mixcolumn_lookup[raw[0]][1];
+	state[3][0] ^= raw[1];
+	state[3][0] ^= raw[2];
+	state[3][0] ^= mixcolumn_lookup[raw[3]][0];
+	// raw 2
+	raw[0] = state[0][1];
+	raw[1] = state[1][1];
+	raw[2] = state[2][1];
+	raw[3] = state[3][1];
+	state[0][1] = mixcolumn_lookup[raw[0]][0];
+	state[0][1] ^= mixcolumn_lookup[raw[1]][1];
+	state[0][1] ^= raw[2];
+	state[0][1] ^= raw[3];
+	state[1][1] = raw[0];
+	state[1][1] ^= mixcolumn_lookup[raw[1]][0];
+	state[1][1] ^= mixcolumn_lookup[raw[2]][1];
+	state[1][1] ^= raw[3];
+	state[2][1] = raw[0];
+	state[2][1] ^= raw[1];
+	state[2][1] ^= mixcolumn_lookup[raw[2]][0];
+	state[2][1] ^= mixcolumn_lookup[raw[3]][1];
+	state[3][1] = mixcolumn_lookup[raw[0]][1];
+	state[3][1] ^= raw[1];
+	state[3][1] ^= raw[2];
+	state[3][1] ^= mixcolumn_lookup[raw[3]][0];
+	// raw 3
+	raw[0] = state[0][2];
+	raw[1] = state[1][2];
+	raw[2] = state[2][2];
+	raw[3] = state[3][2];
+	state[0][2] = mixcolumn_lookup[raw[0]][0];
+	state[0][2] ^= mixcolumn_lookup[raw[1]][1];
+	state[0][2] ^= raw[2];
+	state[0][2] ^= raw[3];
+	state[1][2] = raw[0];
+	state[1][2] ^= mixcolumn_lookup[raw[1]][0];
+	state[1][2] ^= mixcolumn_lookup[raw[2]][1];
+	state[1][2] ^= raw[3];
+	state[2][2] = raw[0];
+	state[2][2] ^= raw[1];
+	state[2][2] ^= mixcolumn_lookup[raw[2]][0];
+	state[2][2] ^= mixcolumn_lookup[raw[3]][1];
+	state[3][2] = mixcolumn_lookup[raw[0]][1];
+	state[3][2] ^= raw[1];
+	state[3][2] ^= raw[2];
+	state[3][2] ^= mixcolumn_lookup[raw[3]][0];
+	// raw 4
+	raw[0] = state[0][3];
+	raw[1] = state[1][3];
+	raw[2] = state[2][3];
+	raw[3] = state[3][3];
+	state[0][3] = mixcolumn_lookup[raw[0]][0];
+	state[0][3] ^= mixcolumn_lookup[raw[1]][1];
+	state[0][3] ^= raw[2];
+	state[0][3] ^= raw[3];
+	state[1][3] = raw[0];
+	state[1][3] ^= mixcolumn_lookup[raw[1]][0];
+	state[1][3] ^= mixcolumn_lookup[raw[2]][1];
+	state[1][3] ^= raw[3];
+	state[2][3] = raw[0];
+	state[2][3] ^= raw[1];
+	state[2][3] ^= mixcolumn_lookup[raw[2]][0];
+	state[2][3] ^= mixcolumn_lookup[raw[3]][1];
+	state[3][3] = mixcolumn_lookup[raw[0]][1];
+	state[3][3] ^= raw[1];
+	state[3][3] ^= raw[2];
+	state[3][3] ^= mixcolumn_lookup[raw[3]][0];
+		
+
+    
     
 }
 
@@ -284,7 +376,7 @@ void rev_mixcolumn(unsigned char state[4][4], unsigned char temp[4][4])
 
 }
 
- void revmixColumns (unsigned char state[4][4]) {
+ void revmixColumns2 (unsigned char state[4][4]) {
  int c , i;
     for ( c=0; c<4; c++) {
         unsigned char b1[4] ;    // 'b1' is a copy of the current column from 'state'
@@ -324,6 +416,99 @@ void rev_mixcolumn(unsigned char state[4][4], unsigned char temp[4][4])
     
 }
 
+void revmixColumns3 (unsigned char state[4][4]) {
+     unsigned char raw[4];
+
+
+	// raw 1
+	raw[0] = state[0][0];
+	raw[1] = state[1][0];
+	raw[2] = state[2][0];
+	raw[3] = state[3][0];
+	state[0][0] = mixcolumn_lookup[raw[0]][5];
+	state[0][0] ^= mixcolumn_lookup[raw[1]][3];
+	state[0][0] ^= mixcolumn_lookup[raw[2]][4];
+	state[0][0] ^= mixcolumn_lookup[raw[3]][2];
+	state[1][0] = mixcolumn_lookup[raw[0]][2];
+	state[1][0] ^= mixcolumn_lookup[raw[1]][5];
+	state[1][0] ^= mixcolumn_lookup[raw[2]][3];
+	state[1][0] ^= mixcolumn_lookup[raw[3]][4];
+	state[2][0] = mixcolumn_lookup[raw[0]][4];
+	state[2][0] ^= mixcolumn_lookup[raw[1]][2];
+	state[2][0] ^= mixcolumn_lookup[raw[2]][5];
+	state[2][0] ^= mixcolumn_lookup[raw[3]][3];
+	state[3][0] = mixcolumn_lookup[raw[0]][3];
+	state[3][0] ^= mixcolumn_lookup[raw[1]][4];
+	state[3][0] ^= mixcolumn_lookup[raw[2]][2];
+	state[3][0] ^= mixcolumn_lookup[raw[3]][5];
+	// raw 2
+	raw[0] = state[0][1];
+	raw[1] = state[1][1];
+	raw[2] = state[2][1];
+	raw[3] = state[3][1];
+	state[0][1] = mixcolumn_lookup[raw[0]][5];
+	state[0][1] ^= mixcolumn_lookup[raw[1]][3];
+	state[0][1] ^= mixcolumn_lookup[raw[2]][4];
+	state[0][1] ^= mixcolumn_lookup[raw[3]][2];
+	state[1][1] = mixcolumn_lookup[raw[0]][2];
+	state[1][1] ^= mixcolumn_lookup[raw[1]][5];
+	state[1][1] ^= mixcolumn_lookup[raw[2]][3];
+	state[1][1] ^= mixcolumn_lookup[raw[3]][4];
+	state[2][1] = mixcolumn_lookup[raw[0]][4];
+	state[2][1] ^= mixcolumn_lookup[raw[1]][2];
+	state[2][1] ^= mixcolumn_lookup[raw[2]][5];
+	state[2][1] ^= mixcolumn_lookup[raw[3]][3];
+	state[3][1] = mixcolumn_lookup[raw[0]][3];
+	state[3][1] ^= mixcolumn_lookup[raw[1]][4];
+	state[3][1] ^= mixcolumn_lookup[raw[2]][2];
+	state[3][1] ^= mixcolumn_lookup[raw[3]][5];
+	// raw 3
+	raw[0] = state[0][2];
+	raw[1] = state[1][2];
+	raw[2] = state[2][2];
+	raw[3] = state[3][2];
+	state[0][2] = mixcolumn_lookup[raw[0]][5];
+	state[0][2] ^= mixcolumn_lookup[raw[1]][3];
+	state[0][2] ^= mixcolumn_lookup[raw[2]][4];
+	state[0][2] ^= mixcolumn_lookup[raw[3]][2];
+	state[1][2] = mixcolumn_lookup[raw[0]][2];
+	state[1][2] ^= mixcolumn_lookup[raw[1]][5];
+	state[1][2] ^= mixcolumn_lookup[raw[2]][3];
+	state[1][2] ^= mixcolumn_lookup[raw[3]][4];
+	state[2][2] = mixcolumn_lookup[raw[0]][4];
+	state[2][2] ^= mixcolumn_lookup[raw[1]][2];
+	state[2][2] ^= mixcolumn_lookup[raw[2]][5];
+	state[2][2] ^= mixcolumn_lookup[raw[3]][3];
+	state[3][2] = mixcolumn_lookup[raw[0]][3];
+	state[3][2] ^= mixcolumn_lookup[raw[1]][4];
+	state[3][2] ^= mixcolumn_lookup[raw[2]][2];
+	state[3][2] ^= mixcolumn_lookup[raw[3]][5];
+	// raw 4
+	raw[0] = state[0][3];
+	raw[1] = state[1][3];
+	raw[2] = state[2][3];
+	raw[3] = state[3][3];
+	state[0][3] = mixcolumn_lookup[raw[0]][5];
+	state[0][3] ^= mixcolumn_lookup[raw[1]][3];
+	state[0][3] ^= mixcolumn_lookup[raw[2]][4];
+	state[0][3] ^= mixcolumn_lookup[raw[3]][2];
+	state[1][3] = mixcolumn_lookup[raw[0]][2];
+	state[1][3] ^= mixcolumn_lookup[raw[1]][5];
+	state[1][3] ^= mixcolumn_lookup[raw[2]][3];
+	state[1][3] ^= mixcolumn_lookup[raw[3]][4];
+	state[2][3] = mixcolumn_lookup[raw[0]][4];
+	state[2][3] ^= mixcolumn_lookup[raw[1]][2];
+	state[2][3] ^= mixcolumn_lookup[raw[2]][5];
+	state[2][3] ^= mixcolumn_lookup[raw[3]][3];
+	state[3][3] = mixcolumn_lookup[raw[0]][3];
+	state[3][3] ^= mixcolumn_lookup[raw[1]][4];
+	state[3][3] ^= mixcolumn_lookup[raw[2]][2];
+	state[3][3] ^= mixcolumn_lookup[raw[3]][5];
+		
+
+    
+    
+}
 void encryption(unsigned char state[4][4], unsigned char expan_key[4][44])
 {
 
@@ -342,7 +527,7 @@ void encryption(unsigned char state[4][4], unsigned char expan_key[4][44])
 	shiftRaw(state);
 
  //   mixcolumn(state,temp);
-    mixColumns(state);
+    mixColumns3(state);
 
 	Add_key(state,expan_key,(int)(loop*start));
 
@@ -373,7 +558,7 @@ void decryption(unsigned char state[4][4], unsigned char expan_key[4][44])
 			Add_key(state,expan_key,(loop*start));
 
 		  //  rev_mixcolumn(state,temp);
-            revmixColumns(state);
+            revmixColumns3(state);
 			}
 
 		rev_shiftrows(state);

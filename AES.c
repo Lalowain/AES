@@ -58,7 +58,6 @@ void key_generate(unsigned char key[4][4], unsigned char expan_key[4][44])
       int index;
       for(index = 0; index < 4; index++)
         temp[index] ^= expan_key[index][i-4];
-
       for(index = 0; index < 4; index++)
         expan_key[index][i] = temp[index];
     }

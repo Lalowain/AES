@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <string.h>
 #include <windows.h>
-#include <Math.h>
 #include "AES.h"
 
 void Add_key(unsigned char state[4][4], unsigned char temp_key[4][44],int index)
@@ -226,93 +224,49 @@ void mixcolumn(unsigned char state[4][4], unsigned char temp[4][4])
 void mixColumns3 (unsigned char state[4][4]) {
      unsigned char raw[4];
 
-	// raw 1
+	// column 1
 	raw[0] = state[0][0];
 	raw[1] = state[1][0];
 	raw[2] = state[2][0];
 	raw[3] = state[3][0];
-	state[0][0] = mixcolumn_lookup[raw[0]][0];
-	state[0][0] ^= mixcolumn_lookup[raw[1]][1];
-	state[0][0] ^= raw[2];
-	state[0][0] ^= raw[3];
-	state[1][0] = raw[0];
-	state[1][0] ^= mixcolumn_lookup[raw[1]][0];
-	state[1][0] ^= mixcolumn_lookup[raw[2]][1];
-	state[1][0] ^= raw[3];
-	state[2][0] = raw[0];
-	state[2][0] ^= raw[1];
-	state[2][0] ^= mixcolumn_lookup[raw[2]][0];
-	state[2][0] ^= mixcolumn_lookup[raw[3]][1];
-	state[3][0] = mixcolumn_lookup[raw[0]][1];
-	state[3][0] ^= raw[1];
-	state[3][0] ^= raw[2];
-	state[3][0] ^= mixcolumn_lookup[raw[3]][0];
-	// raw 2
+	
+	state[0][0] = mixcolumn_lookup[raw[0]][0] ^ mixcolumn_lookup[raw[1]][1] ^ raw[2] ^ raw[3];// {02}•a0 + {03}•a1 + a2 + a3
+	state[1][0] = raw[0] ^ mixcolumn_lookup[raw[1]][0] ^ mixcolumn_lookup[raw[2]][1] ^ raw[3];//  a0 • {02}•a1 + {03}•a2 + a3
+	state[2][0] = raw[0] ^ raw[1] ^ mixcolumn_lookup[raw[2]][0] ^ mixcolumn_lookup[raw[3]][1];//  a0 + a1 + {02}•a2 + {03}•a3
+	state[3][0] = mixcolumn_lookup[raw[0]][1] ^ raw[1] ^ raw[2] ^ mixcolumn_lookup[raw[3]][0];// {03}•a0 + a1 + a2 + {02}•a3
+
+	// column 2
 	raw[0] = state[0][1];
 	raw[1] = state[1][1];
 	raw[2] = state[2][1];
 	raw[3] = state[3][1];
-	state[0][1] = mixcolumn_lookup[raw[0]][0];
-	state[0][1] ^= mixcolumn_lookup[raw[1]][1];
-	state[0][1] ^= raw[2];
-	state[0][1] ^= raw[3];
-	state[1][1] = raw[0];
-	state[1][1] ^= mixcolumn_lookup[raw[1]][0];
-	state[1][1] ^= mixcolumn_lookup[raw[2]][1];
-	state[1][1] ^= raw[3];
-	state[2][1] = raw[0];
-	state[2][1] ^= raw[1];
-	state[2][1] ^= mixcolumn_lookup[raw[2]][0];
-	state[2][1] ^= mixcolumn_lookup[raw[3]][1];
-	state[3][1] = mixcolumn_lookup[raw[0]][1];
-	state[3][1] ^= raw[1];
-	state[3][1] ^= raw[2];
-	state[3][1] ^= mixcolumn_lookup[raw[3]][0];
-	// raw 3
+	
+	state[0][1] = mixcolumn_lookup[raw[0]][0] ^ mixcolumn_lookup[raw[1]][1] ^ raw[2] ^ raw[3];// {02}•a0 + {03}•a1 + a2 + a3
+	state[1][1] = raw[0] ^ mixcolumn_lookup[raw[1]][0] ^ mixcolumn_lookup[raw[2]][1] ^ raw[3];//  a0 • {02}•a1 + {03}•a2 + a3
+	state[2][1] = raw[0] ^ raw[1] ^ mixcolumn_lookup[raw[2]][0] ^ mixcolumn_lookup[raw[3]][1];//  a0 + a1 + {02}•a2 + {03}•a3
+	state[3][1] = mixcolumn_lookup[raw[0]][1] ^ raw[1] ^ raw[2] ^ mixcolumn_lookup[raw[3]][0];// {03}•a0 + a1 + a2 + {02}•a3
+
+	// column 3
 	raw[0] = state[0][2];
 	raw[1] = state[1][2];
 	raw[2] = state[2][2];
 	raw[3] = state[3][2];
-	state[0][2] = mixcolumn_lookup[raw[0]][0];
-	state[0][2] ^= mixcolumn_lookup[raw[1]][1];
-	state[0][2] ^= raw[2];
-	state[0][2] ^= raw[3];
-	state[1][2] = raw[0];
-	state[1][2] ^= mixcolumn_lookup[raw[1]][0];
-	state[1][2] ^= mixcolumn_lookup[raw[2]][1];
-	state[1][2] ^= raw[3];
-	state[2][2] = raw[0];
-	state[2][2] ^= raw[1];
-	state[2][2] ^= mixcolumn_lookup[raw[2]][0];
-	state[2][2] ^= mixcolumn_lookup[raw[3]][1];
-	state[3][2] = mixcolumn_lookup[raw[0]][1];
-	state[3][2] ^= raw[1];
-	state[3][2] ^= raw[2];
-	state[3][2] ^= mixcolumn_lookup[raw[3]][0];
-	// raw 4
+	
+	state[0][2] = mixcolumn_lookup[raw[0]][0] ^ mixcolumn_lookup[raw[1]][1] ^ raw[2] ^ raw[3]; // {02}•a0 + {03}•a1 + a2 + a3
+	state[1][2] = raw[0] ^ mixcolumn_lookup[raw[1]][0] ^ mixcolumn_lookup[raw[2]][1] ^ raw[3];//  a0 • {02}•a1 + {03}•a2 + a3;
+	state[2][2] = raw[0] ^ raw[1] ^ mixcolumn_lookup[raw[2]][0] ^ mixcolumn_lookup[raw[3]][1];//  a0 + a1 + {02}•a2 + {03}•a3;
+	state[3][2] = mixcolumn_lookup[raw[0]][1] ^ raw[1] ^ raw[2] ^ mixcolumn_lookup[raw[3]][0];// {03}•a0 + a1 + a2 + {02}•a3;
+
+	// column 4
 	raw[0] = state[0][3];
 	raw[1] = state[1][3];
 	raw[2] = state[2][3];
 	raw[3] = state[3][3];
-	state[0][3] = mixcolumn_lookup[raw[0]][0];
-	state[0][3] ^= mixcolumn_lookup[raw[1]][1];
-	state[0][3] ^= raw[2];
-	state[0][3] ^= raw[3];
-	state[1][3] = raw[0];
-	state[1][3] ^= mixcolumn_lookup[raw[1]][0];
-	state[1][3] ^= mixcolumn_lookup[raw[2]][1];
-	state[1][3] ^= raw[3];
-	state[2][3] = raw[0];
-	state[2][3] ^= raw[1];
-	state[2][3] ^= mixcolumn_lookup[raw[2]][0];
-	state[2][3] ^= mixcolumn_lookup[raw[3]][1];
-	state[3][3] = mixcolumn_lookup[raw[0]][1];
-	state[3][3] ^= raw[1];
-	state[3][3] ^= raw[2];
-	state[3][3] ^= mixcolumn_lookup[raw[3]][0];
-		
-
-    
+	
+	state[0][3] = mixcolumn_lookup[raw[0]][0] ^ mixcolumn_lookup[raw[1]][1] ^ raw[2] ^ raw[3];// {02}•a0 + {03}•a1 + a2 + a3;
+	state[1][3] = raw[0] ^ mixcolumn_lookup[raw[1]][0] ^ mixcolumn_lookup[raw[2]][1] ^ raw[3];//  a0 • {02}•a1 + {03}•a2 + a3;
+	state[2][3] = raw[0] ^ raw[1] ^ mixcolumn_lookup[raw[2]][0] ^ mixcolumn_lookup[raw[3]][1];//  a0 + a1 + {02}•a2 + {03}•a3;
+	state[3][3] = mixcolumn_lookup[raw[0]][1] ^ raw[1] ^ raw[2] ^ mixcolumn_lookup[raw[3]][0];// {03}•a0 + a1 + a2 + {02}•a3;   
     
 }
 
@@ -419,93 +373,49 @@ void revmixColumns3 (unsigned char state[4][4]) {
      unsigned char raw[4];
 
 
-	// raw 1
+	// column 1
 	raw[0] = state[0][0];
 	raw[1] = state[1][0];
 	raw[2] = state[2][0];
 	raw[3] = state[3][0];
-	state[0][0] = mixcolumn_lookup[raw[0]][5];
-	state[0][0] ^= mixcolumn_lookup[raw[1]][3];
-	state[0][0] ^= mixcolumn_lookup[raw[2]][4];
-	state[0][0] ^= mixcolumn_lookup[raw[3]][2];
-	state[1][0] = mixcolumn_lookup[raw[0]][2];
-	state[1][0] ^= mixcolumn_lookup[raw[1]][5];
-	state[1][0] ^= mixcolumn_lookup[raw[2]][3];
-	state[1][0] ^= mixcolumn_lookup[raw[3]][4];
-	state[2][0] = mixcolumn_lookup[raw[0]][4];
-	state[2][0] ^= mixcolumn_lookup[raw[1]][2];
-	state[2][0] ^= mixcolumn_lookup[raw[2]][5];
-	state[2][0] ^= mixcolumn_lookup[raw[3]][3];
-	state[3][0] = mixcolumn_lookup[raw[0]][3];
-	state[3][0] ^= mixcolumn_lookup[raw[1]][4];
-	state[3][0] ^= mixcolumn_lookup[raw[2]][2];
-	state[3][0] ^= mixcolumn_lookup[raw[3]][5];
-	// raw 2
+	
+	state[0][0] = mixcolumn_lookup[raw[0]][5] ^ mixcolumn_lookup[raw[1]][3] ^ mixcolumn_lookup[raw[2]][4] ^ mixcolumn_lookup[raw[3]][2];// {0e}•a0 + {0b}•a1 + {0d}•a2 + {09}•a3
+	state[1][0] = mixcolumn_lookup[raw[0]][2] ^ mixcolumn_lookup[raw[1]][5] ^ mixcolumn_lookup[raw[2]][3] ^ mixcolumn_lookup[raw[3]][4];// {09}•a0 • {0e}•a1 + {0b}•a2 + {0d}•a3
+	state[2][0] = mixcolumn_lookup[raw[0]][4] ^ mixcolumn_lookup[raw[1]][2] ^ mixcolumn_lookup[raw[2]][5] ^ mixcolumn_lookup[raw[3]][3];// {0d}•a0 + {09}•a1 + {0e}•a2 + {0b}•a3
+	state[3][0] = mixcolumn_lookup[raw[0]][3] ^ mixcolumn_lookup[raw[1]][4] ^ mixcolumn_lookup[raw[2]][2] ^ mixcolumn_lookup[raw[3]][5];// {0b}•a0 + {0d}•a1 + {09}•a2 + {0e}•a3
+
+	// column 2
 	raw[0] = state[0][1];
 	raw[1] = state[1][1];
 	raw[2] = state[2][1];
 	raw[3] = state[3][1];
-	state[0][1] = mixcolumn_lookup[raw[0]][5];
-	state[0][1] ^= mixcolumn_lookup[raw[1]][3];
-	state[0][1] ^= mixcolumn_lookup[raw[2]][4];
-	state[0][1] ^= mixcolumn_lookup[raw[3]][2];
-	state[1][1] = mixcolumn_lookup[raw[0]][2];
-	state[1][1] ^= mixcolumn_lookup[raw[1]][5];
-	state[1][1] ^= mixcolumn_lookup[raw[2]][3];
-	state[1][1] ^= mixcolumn_lookup[raw[3]][4];
-	state[2][1] = mixcolumn_lookup[raw[0]][4];
-	state[2][1] ^= mixcolumn_lookup[raw[1]][2];
-	state[2][1] ^= mixcolumn_lookup[raw[2]][5];
-	state[2][1] ^= mixcolumn_lookup[raw[3]][3];
-	state[3][1] = mixcolumn_lookup[raw[0]][3];
-	state[3][1] ^= mixcolumn_lookup[raw[1]][4];
-	state[3][1] ^= mixcolumn_lookup[raw[2]][2];
-	state[3][1] ^= mixcolumn_lookup[raw[3]][5];
-	// raw 3
+	
+	state[0][1] = mixcolumn_lookup[raw[0]][5] ^ mixcolumn_lookup[raw[1]][3] ^ mixcolumn_lookup[raw[2]][4] ^ mixcolumn_lookup[raw[3]][2];// {0e}•a0 + {0b}•a1 + {0d}•a2 + {09}•a3
+	state[1][1] = mixcolumn_lookup[raw[0]][2] ^ mixcolumn_lookup[raw[1]][5] ^ mixcolumn_lookup[raw[2]][3] ^ mixcolumn_lookup[raw[3]][4];// {09}•a0 • {0e}•a1 + {0b}•a2 + {0d}•a3
+	state[2][1] = mixcolumn_lookup[raw[0]][4] ^ mixcolumn_lookup[raw[1]][2] ^ mixcolumn_lookup[raw[2]][5] ^ mixcolumn_lookup[raw[3]][3];// {0d}•a0 + {09}•a1 + {0e}•a2 + {0b}•a3
+	state[3][1] = mixcolumn_lookup[raw[0]][3] ^ mixcolumn_lookup[raw[1]][4] ^ mixcolumn_lookup[raw[2]][2] ^ mixcolumn_lookup[raw[3]][5];// {0b}•a0 + {0d}•a1 + {09}•a2 + {0e}•a3
+
+	// column 3
 	raw[0] = state[0][2];
 	raw[1] = state[1][2];
 	raw[2] = state[2][2];
 	raw[3] = state[3][2];
-	state[0][2] = mixcolumn_lookup[raw[0]][5];
-	state[0][2] ^= mixcolumn_lookup[raw[1]][3];
-	state[0][2] ^= mixcolumn_lookup[raw[2]][4];
-	state[0][2] ^= mixcolumn_lookup[raw[3]][2];
-	state[1][2] = mixcolumn_lookup[raw[0]][2];
-	state[1][2] ^= mixcolumn_lookup[raw[1]][5];
-	state[1][2] ^= mixcolumn_lookup[raw[2]][3];
-	state[1][2] ^= mixcolumn_lookup[raw[3]][4];
-	state[2][2] = mixcolumn_lookup[raw[0]][4];
-	state[2][2] ^= mixcolumn_lookup[raw[1]][2];
-	state[2][2] ^= mixcolumn_lookup[raw[2]][5];
-	state[2][2] ^= mixcolumn_lookup[raw[3]][3];
-	state[3][2] = mixcolumn_lookup[raw[0]][3];
-	state[3][2] ^= mixcolumn_lookup[raw[1]][4];
-	state[3][2] ^= mixcolumn_lookup[raw[2]][2];
-	state[3][2] ^= mixcolumn_lookup[raw[3]][5];
-	// raw 4
+	
+	state[0][2] = mixcolumn_lookup[raw[0]][5] ^ mixcolumn_lookup[raw[1]][3] ^ mixcolumn_lookup[raw[2]][4] ^ mixcolumn_lookup[raw[3]][2];// {0e}•a0 + {0b}•a1 + {0d}•a2 + {09}•a3
+	state[1][2] = mixcolumn_lookup[raw[0]][2] ^ mixcolumn_lookup[raw[1]][5] ^ mixcolumn_lookup[raw[2]][3] ^ mixcolumn_lookup[raw[3]][4];// {09}•a0 • {0e}•a1 + {0b}•a2 + {0d}•a3
+	state[2][2] = mixcolumn_lookup[raw[0]][4] ^ mixcolumn_lookup[raw[1]][2] ^ mixcolumn_lookup[raw[2]][5] ^ mixcolumn_lookup[raw[3]][3];// {0d}•a0 + {09}•a1 + {0e}•a2 + {0b}•a3
+	state[3][2] = mixcolumn_lookup[raw[0]][3] ^ mixcolumn_lookup[raw[1]][4] ^ mixcolumn_lookup[raw[2]][2] ^ mixcolumn_lookup[raw[3]][5];// {0b}•a0 + {0d}•a1 + {09}•a2 + {0e}•a3
+
+	// column 4
 	raw[0] = state[0][3];
 	raw[1] = state[1][3];
 	raw[2] = state[2][3];
 	raw[3] = state[3][3];
-	state[0][3] = mixcolumn_lookup[raw[0]][5];
-	state[0][3] ^= mixcolumn_lookup[raw[1]][3];
-	state[0][3] ^= mixcolumn_lookup[raw[2]][4];
-	state[0][3] ^= mixcolumn_lookup[raw[3]][2];
-	state[1][3] = mixcolumn_lookup[raw[0]][2];
-	state[1][3] ^= mixcolumn_lookup[raw[1]][5];
-	state[1][3] ^= mixcolumn_lookup[raw[2]][3];
-	state[1][3] ^= mixcolumn_lookup[raw[3]][4];
-	state[2][3] = mixcolumn_lookup[raw[0]][4];
-	state[2][3] ^= mixcolumn_lookup[raw[1]][2];
-	state[2][3] ^= mixcolumn_lookup[raw[2]][5];
-	state[2][3] ^= mixcolumn_lookup[raw[3]][3];
-	state[3][3] = mixcolumn_lookup[raw[0]][3];
-	state[3][3] ^= mixcolumn_lookup[raw[1]][4];
-	state[3][3] ^= mixcolumn_lookup[raw[2]][2];
-	state[3][3] ^= mixcolumn_lookup[raw[3]][5];
-		
-
-    
+	
+	state[0][3] = mixcolumn_lookup[raw[0]][5] ^ mixcolumn_lookup[raw[1]][3] ^ mixcolumn_lookup[raw[2]][4] ^ mixcolumn_lookup[raw[3]][2];// {0e}•a0 + {0b}•a1 + {0d}•a2 + {09}•a3
+	state[1][3] = mixcolumn_lookup[raw[0]][2] ^ mixcolumn_lookup[raw[1]][5] ^ mixcolumn_lookup[raw[2]][3] ^ mixcolumn_lookup[raw[3]][4];// {09}•a0 • {0e}•a1 + {0b}•a2 + {0d}•a3
+	state[2][3] = mixcolumn_lookup[raw[0]][4] ^ mixcolumn_lookup[raw[1]][2] ^ mixcolumn_lookup[raw[2]][5] ^ mixcolumn_lookup[raw[3]][3];// {0d}•a0 + {09}•a1 + {0e}•a2 + {0b}•a3
+	state[3][3] = mixcolumn_lookup[raw[0]][3] ^ mixcolumn_lookup[raw[1]][4] ^ mixcolumn_lookup[raw[2]][2] ^ mixcolumn_lookup[raw[3]][5];// {0b}•a0 + {0d}•a1 + {09}•a2 + {0e}•a3
     
 }
 void encryption(unsigned char state[4][4], unsigned char expan_key[4][44])
